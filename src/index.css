@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-gray-100 font-sans;
+  }
+
+  /* Hide scrollbar for page content (keeps it clean on desktop) */
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+/* 批注面板的 Markdown 内容样式 */
+.annotation-markdown h1,
+.annotation-markdown h2,
+.annotation-markdown h3,
+.annotation-markdown h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+  margin: 10px 0 6px;
+}
+.annotation-markdown p {
+  font-size: 12px;
+  color: #4b5563;
+  line-height: 1.65;
+  margin: 4px 0 6px;
+}
+.annotation-markdown ul,
+.annotation-markdown ol {
+  font-size: 12px;
+  color: #4b5563;
+  line-height: 1.65;
+  padding-left: 16px;
+  margin: 4px 0 6px;
+}
+.annotation-markdown ul {
+  list-style: disc;
+}
+.annotation-markdown ol {
+  list-style: decimal;
+}
+.annotation-markdown li {
+  margin: 2px 0;
+}
+.annotation-markdown strong {
+  font-weight: 600;
+  color: #111827;
+}
+.annotation-markdown code {
+  background: #f3f4f6;
+  color: #be185d;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.annotation-markdown blockquote {
+  border-left: 3px solid #e5e7eb;
+  padding: 2px 0 2px 10px;
+  color: #6b7280;
+  font-size: 12px;
+  margin: 6px 0;
+}
+.annotation-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6px 0;
+  font-size: 11px;
+}
+.annotation-markdown th,
+.annotation-markdown td {
+  border: 1px solid #e5e7eb;
+  padding: 4px 8px;
+  text-align: left;
+  color: #4b5563;
+}
+.annotation-markdown th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #111827;
+}
+.annotation-markdown a {
+  color: #0052d9;
+  text-decoration: underline;
+}
+
+@layer utilities {
+  /* Simulate safe area at the bottom */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* 
+   * Phone frame shadow on desktop
+   * The phone container gets a subtle glow
+   */
+  .phone-shadow {
+    box-shadow:
+      0 25px 60px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Hide scrollbar on horizontal scrollers (e.g. 商城分类 Tab) */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
