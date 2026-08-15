@@ -58,7 +58,7 @@ export function MallPage({ cart, onOpenCategory, onViewCart }: MallPageProps) {
       {/* 双栏分类：左侧主分类（sticky）+ 右侧子分类/子子分类 */}
       <div className="flex items-start -mx-4 px-4">
         {/* 左侧主分类（滚动到顶部时吸附） */}
-        <nav className="sticky top-2 w-[92px] shrink-0 rounded-2xl bg-white overflow-hidden shadow-sm">
+        <nav className="sticky top-2 w-[92px] shrink-0 bg-white overflow-hidden shadow-sm">
           {MALL_CATEGORIES.map((c) => {
             const active = c.key === main.key
             const Icon = c.Icon
@@ -114,13 +114,13 @@ function SubSection({
         <ChevronRight size={15} className="text-gray-400" />
       </button>
 
-      {/* 子子分类导航 */}
-      <div className="mt-1 space-y-2">
+      {/* 子子分类导航（直角样式） */}
+      <div className="mt-1 overflow-hidden bg-white border border-gray-100 divide-y divide-gray-100">
         {sub.leaves.map((leaf) => (
           <button
             key={leaf.key}
             onClick={() => onOpenLeaf([leaf.key], leaf.label)}
-            className="w-full flex items-center justify-between rounded-xl bg-white border border-gray-100 px-3 py-3 text-left active:bg-gray-50"
+            className="w-full flex items-center justify-between px-3 py-3 text-left active:bg-gray-50"
           >
             <span className="text-[13px] text-gray-700">{leaf.label}</span>
             <ChevronRight size={15} className="text-gray-300 shrink-0" />
@@ -129,7 +129,7 @@ function SubSection({
         {sub.leaves.length > 1 && (
           <button
             onClick={() => onOpenLeaf(subAllLeaves, sub.label)}
-            className="w-full flex items-center gap-1 px-1 text-[11px] text-brand-500 font-medium py-1"
+            className="w-full flex items-center gap-1 px-3 text-[11px] text-brand-500 font-medium py-2.5 active:bg-gray-50"
           >
             全部 {sub.label} <ChevronRight size={11} />
           </button>
