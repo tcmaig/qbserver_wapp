@@ -108,13 +108,14 @@ function ProductCard({
   onAdd: () => void
   onRemove: () => void
 }) {
-  const off = p.originalPrice ? Math.round((1 - p.price / p.originalPrice) * 100) : 0
+  // 折扣：支付原价的比例，折算为「X 折」（28/35=0.8 → 8 折）
+  const off = p.originalPrice ? Math.round((p.price / p.originalPrice) * 10) : 0
   return (
     <Card className="overflow-hidden">
       {/* 商品图（占位 lucide 图标块） */}
       <div className={`relative h-28 flex items-center justify-center ${p.bg}`}>
         <p.Icon size={52} strokeWidth={1.2} className="text-gray-600/60" />
-        {off > 0 && (
+        {off > 0 && off < 10 && (
           <span className="absolute top-2 left-0 h-5 px-2 rounded-r-full bg-red-500 text-white text-[10px] font-semibold flex items-center">
             {off} 折
           </span>
@@ -134,8 +135,9 @@ function ProductCard({
           {p.spec} · 已售 {p.sold}
         </div>
 
-        <div className="mt-2 flex items-center justify-between">
-          <div className="flex items-baseline gap-1.5">
+        {/* 价格与按钮同一行：价格可收缩，按钮固定尺寸不挤压 */}
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <div className="flex items-baseline gap-1.5 min-w-0">
             <span className="text-[16px] font-bold text-brand-600">¥{p.price.toFixed(2)}</span>
             {p.originalPrice && (
               <span className="text-[11px] text-gray-400 line-through">¥{p.originalPrice}</span>
@@ -143,13 +145,13 @@ function ProductCard({
           </div>
 
           {count > 0 ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 shrink-0">
               <button
                 onClick={onRemove}
                 className="h-7 w-7 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center active:bg-gray-200"
                 aria-label="减少"
               >
-                <Minus size={14} />
+                <Minus size={13} />
               </button>
               <span className="text-sm font-semibold text-gray-900 min-w-[18px] text-center">{count}</span>
               <button
@@ -157,17 +159,17 @@ function ProductCard({
                 className="h-7 w-7 rounded-full bg-brand-500 text-white flex items-center justify-center active:bg-brand-600"
                 aria-label="增加"
               >
-                <Plus size={14} />
+                <Plus size={13} />
               </button>
             </div>
           ) : (
             <button
               onClick={onAdd}
               disabled={!p.inStock}
-              className="flex items-center gap-1 h-8 px-3 rounded-full bg-brand-50 text-brand-600 text-xs font-semibold active:bg-brand-100 disabled:opacity-40 disabled:bg-gray-100 disabled:text-gray-400"
+              className="shrink-0 h-7 w-8 rounded-full bg-brand-500 text-white flex items-center justify-center active:bg-brand-600 disabled:opacity-50"
+              aria-label="加入购物车"
             >
-              <ShoppingCart size={14} />
-              加入
+              <Plus size={15} />
             </button>
           )}
         </div>

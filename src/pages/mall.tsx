@@ -114,18 +114,25 @@ function SubSection({
         <ChevronRight size={15} className="text-gray-400" />
       </button>
 
-      {/* 子子分类导航（直角样式） */}
-      <div className="mt-1 overflow-hidden bg-white border border-gray-100 divide-y divide-gray-100">
-        {sub.leaves.map((leaf) => (
-          <button
-            key={leaf.key}
-            onClick={() => onOpenLeaf([leaf.key], leaf.label)}
-            className="w-full flex items-center justify-between px-3 py-3 text-left active:bg-gray-50"
-          >
-            <span className="text-[13px] text-gray-700">{leaf.label}</span>
-            <ChevronRight size={15} className="text-gray-300 shrink-0" />
-          </button>
-        ))}
+      {/* 子子分类导航（直角列表）：每项带缩略图占位 */}
+      <div className="mt-1 bg-white border border-gray-100 divide-y divide-gray-100">
+        {sub.leaves.map((leaf) => {
+          const LeafIcon = leaf.Icon
+          return (
+            <button
+              key={leaf.key}
+              onClick={() => onOpenLeaf([leaf.key], leaf.label)}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-left active:bg-gray-50"
+            >
+              {/* 缩略图占位（真实场景替换为商品分类图片） */}
+              <span className={`shrink-0 h-11 w-11 rounded-none flex items-center justify-center ${leaf.bg}`}>
+                <LeafIcon size={22} strokeWidth={1.6} className="text-gray-600" />
+              </span>
+              <span className="flex-1 text-[13px] text-gray-700">{leaf.label}</span>
+              <ChevronRight size={15} className="text-gray-300 shrink-0" />
+            </button>
+          )
+        })}
         {sub.leaves.length > 1 && (
           <button
             onClick={() => onOpenLeaf(subAllLeaves, sub.label)}

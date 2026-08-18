@@ -18,6 +18,10 @@ import {
   RollerCoaster,
   Pipette,
   Zap,
+  Sparkles,
+  Sun,
+  Package,
+  CircleDot,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -556,6 +560,10 @@ export type MallLeafKey =
 export interface MallLeafCategory {
   key: MallLeafKey
   label: string
+  /** 缩略图占位：lucide 图标（真实场景替换为图片 URL） */
+  Icon: LucideIcon
+  /** 缩略图底色（静态类名） */
+  bg: string
 }
 
 /** 子分类（右侧展示；可含子子分类） */
@@ -585,19 +593,19 @@ export const MALL_CATEGORIES: MallMainCategory[] = [
         key: 'ac-capacitor',
         label: '电容类',
         leaves: [
-          { key: 'ac-cap-start', label: '启动电容' },
-          { key: 'ac-cap-run', label: '运行电容' },
+          { key: 'ac-cap-start', label: '启动电容', Icon: CircleDot, bg: 'bg-sky-50' },
+          { key: 'ac-cap-run', label: '运行电容', Icon: Cpu, bg: 'bg-blue-50' },
         ],
       },
       {
         key: 'ac-refrigerant',
         label: '制冷剂',
-        leaves: [{ key: 'ac-gas-r410a', label: 'R410A' }],
+        leaves: [{ key: 'ac-gas-r410a', label: 'R410A', Icon: Snowflake, bg: 'bg-cyan-50' }],
       },
       {
         key: 'ac-filter',
         label: '滤网风叶',
-        leaves: [{ key: 'ac-filter', label: '滤网' }],
+        leaves: [{ key: 'ac-filter', label: '滤网', Icon: Filter, bg: 'bg-sky-50' }],
       },
     ],
   },
@@ -610,14 +618,14 @@ export const MALL_CATEGORIES: MallMainCategory[] = [
         key: 'clean-agent',
         label: '清洁剂',
         leaves: [
-          { key: 'clean-filter', label: '滤网清洗剂' },
-          { key: 'clean-mold', label: '除霉剂' },
+          { key: 'clean-filter', label: '滤网清洗剂', Icon: SprayCan, bg: 'bg-emerald-50' },
+          { key: 'clean-mold', label: '除霉剂', Icon: Sparkles, bg: 'bg-rose-50' },
         ],
       },
       {
         key: 'clean-sanitize',
         label: '消毒除味',
-        leaves: [{ key: 'clean-sterilize', label: '消毒除味' }],
+        leaves: [{ key: 'clean-sterilize', label: '消毒除味', Icon: Sparkles, bg: 'bg-teal-50' }],
       },
     ],
   },
@@ -629,17 +637,17 @@ export const MALL_CATEGORIES: MallMainCategory[] = [
       {
         key: 'lamp-tube',
         label: '灯管',
-        leaves: [{ key: 'lamp-tube', label: 'T8/T5 灯管' }],
+        leaves: [{ key: 'lamp-tube', label: 'T8/T5 灯管', Icon: Lightbulb, bg: 'bg-amber-50' }],
       },
       {
         key: 'lamp-bulb',
         label: '球泡',
-        leaves: [{ key: 'lamp-bulb', label: 'E27/E14 球泡' }],
+        leaves: [{ key: 'lamp-bulb', label: 'E27/E14 球泡', Icon: Sun, bg: 'bg-yellow-50' }],
       },
       {
         key: 'lamp-sensor',
         label: '感应开关',
-        leaves: [{ key: 'lamp-sensor', label: '感应开关面板' }],
+        leaves: [{ key: 'lamp-sensor', label: '感应开关面板', Icon: Radar, bg: 'bg-indigo-50' }],
       },
     ],
   },
@@ -651,17 +659,17 @@ export const MALL_CATEGORIES: MallMainCategory[] = [
       {
         key: 'pipe-seal',
         label: '密封辅材',
-        leaves: [{ key: 'pipe-seal', label: '生料带/密封胶' }],
+        leaves: [{ key: 'pipe-seal', label: '生料带/密封胶', Icon: Package, bg: 'bg-gray-50' }],
       },
       {
         key: 'pipe-valve',
         label: '阀芯',
-        leaves: [{ key: 'pipe-valve', label: '水龙头阀芯' }],
+        leaves: [{ key: 'pipe-valve', label: '水龙头阀芯', Icon: Droplets, bg: 'bg-cyan-50' }],
       },
       {
         key: 'pipe-filter',
         label: '过滤滤芯',
-        leaves: [{ key: 'pipe-filter', label: '前置滤芯' }],
+        leaves: [{ key: 'pipe-filter', label: '前置滤芯', Icon: Filter, bg: 'bg-teal-50' }],
       },
     ],
   },
@@ -673,12 +681,12 @@ export const MALL_CATEGORIES: MallMainCategory[] = [
       {
         key: 'tool-manual',
         label: '手动工具',
-        leaves: [{ key: 'tool-manual', label: '螺丝刀套装' }],
+        leaves: [{ key: 'tool-manual', label: '螺丝刀套装', Icon: Wrench, bg: 'bg-orange-50' }],
       },
       {
         key: 'tool-meter',
         label: '检测仪表',
-        leaves: [{ key: 'tool-meter', label: '测电笔' }],
+        leaves: [{ key: 'tool-meter', label: '测电笔', Icon: Zap, bg: 'bg-purple-50' }],
       },
     ],
   },
