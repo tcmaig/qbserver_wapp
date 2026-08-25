@@ -72,7 +72,7 @@
 }
 
 /* 三种颜色 */
-.banner-bg-0 { background: linear-gradient(135deg, #07C160, #059669); }
+.banner-bg-0 { background: linear-gradient(135deg, #e09a2f, #be7303); }
 .banner-bg-1 { background: linear-gradient(135deg, #0EA5E9, #0284C7); }
 .banner-bg-2 { background: linear-gradient(135deg, #10B981, #059669); }
 
@@ -115,7 +115,7 @@
 
 .kengang-left {
   flex: 1.2;
-  background: linear-gradient(135deg,  #ebfc51, #f7f31c);
+  background: linear-gradient(135deg,  #42c9f1, #09a4ec);
   border-radius: 20rpx;
   padding: 28rpx 24rpx;
   display: flex;
