@@ -1,0 +1,79 @@
+<!-- 商城横幅 -->
+<view class="mall-banner">
+  <view class="mall-banner-content">
+    <text class="mall-banner-title">门店采购 · 次日达</text>
+    <text class="mall-banner-sub">配件、耗材、照明一站购齐</text>
+  </view>
+  <view class="mall-banner-cart" bindtap="goToCart">
+    <text class="cart-icon">🛒</text>
+    <view wx:if="{{cartCount > 0}}" class="cart-badge">{{cartCount > 99 ? '99+' : cartCount}}</view>
+  </view>
+</view>
+
+<!-- 分类 -->
+<view class="mall-categories">
+  <!-- 左侧主分类 -->
+  <scroll-view class="category-left" scroll-y="{{true}}">
+    <view 
+      class="category-left-item {{mainKey === item.key ? 'active' : ''}}" 
+      wx:for="{{categories}}" 
+      wx:key="key"
+      bindtap="selectMain" 
+      data-key="{{item.key}}"
+    >
+      <text>{{item.label}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 右侧子分类 -->
+  <scroll-view class="category-right" scroll-y="{{true}}">
+    <view class="sub-section" wx:for="{{currentMain.subs}}" wx:key="key">
+      <view class="sub-header" bindtap="openSubCategory" data-key="{{item.key}}">
+        <text class="sub-title">{{item.label}}</text>
+        <text class="sub-arrow">›</text>
+      </view>
+      <view class="sub-items">
+        <view 
+          class="sub-item" 
+          wx:for="{{item.leaves}}" 
+          wx:key="key"
+          bindtap="openLeaf" 
+          data-key="{{item.key}}"
+          data-title="{{item.label}}"
+        >
+          <view class="sub-item-icon bg-{{item.bg}}">{{item.icon}}</view>
+          <text class="sub-item-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>
+
+<!-- 商品列表 -->
+<view class="product-list">
+  <view class="product-section-title">推荐商品</view>
+  <view class="product-grid">
+    <view 
+      class="product-card" 
+      wx:for="{{products}}" 
+      wx:key="id"
+      bindtap="goToProductDetail" 
+      data-id="{{item.id}}"
+    >
+      <view class="product-image bg-{{item.bg}}">
+        <text class="product-icon">{{item.icon}}</text>
+        <view wx:if="{{item.discount}}" class="product-tag">{{item.discount}}折</view>
+      </view>
+      <view class="product-info">
+        <text class="product-name">{{item.name}}</text>
+        <text class="product-spec">{{item.spec}}</text>
+        <view class="product-bottom">
+          <text class="product-price">¥{{item.price}}</text>
+          <view class="product-cart-btn" catchtap="addToCart" data-id="{{item.id}}">
+            <text>+</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

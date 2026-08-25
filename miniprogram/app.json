@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/mall/index",
+    "pages/orders/index",
+    "pages/mine/index",
+    "pages/message/index",
+    "pages/order-detail/index",
+    "pages/evaluate/index",
+    "pages/form/index",
+    "pages/store/index",
+    "pages/register-store/index"
+  ],
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#07C160",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/mall/index",
+        "text": "商城",
+        "iconPath": "images/tabbar/store.png",
+        "selectedIconPath": "images/tabbar/store-active.png"
+      },
+      {
+        "pagePath": "pages/orders/index",
+        "text": "工单",
+        "iconPath": "images/tabbar/clipboard-list.png",
+        "selectedIconPath": "images/tabbar/clipboard-list-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "images/tabbar/user.png",
+        "selectedIconPath": "images/tabbar/user-active.png"
+      }
+    ]
+  },
+  "window": {
+    "navigationBarTitleText": "壹咖",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f3f4f6"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

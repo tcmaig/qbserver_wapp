@@ -1,0 +1,38 @@
+<view class="register-header">
+  <view class="register-header-icon">🏪</view>
+  <view>
+    <text class="register-header-title">登记新门店</text>
+    <text class="register-header-sub">找不到你的门店？在此登记。登记后立即成为当前绑定门店</text>
+  </view>
+</view>
+
+<!-- 区域 -->
+<view class="form-card">
+  <view class="info-title required">选择所在区域</view>
+  <picker mode="selector" range="{{districts}}" bindchange="onDistrictChange">
+    <view class="picker-display">
+      <text>{{district || '请选择区域'}}</text>
+      <text class="picker-arrow">▼</text>
+    </view>
+  </picker>
+  <text class="form-hint">📍 系统将根据所选区域自动生成店名，可修改</text>
+</view>
+
+<!-- 店名 -->
+<view class="form-card">
+  <view class="info-title required">门店名称</view>
+  <input class="form-input" placeholder="如：壹咖·滨江区店" value="{{storeName}}" bindinput="onNameInput" />
+  <text wx:if="{{district}}" class="form-hint">✅ 已按「{{district}}」自动生成，可直接修改</text>
+</view>
+
+<!-- 地址 -->
+<view class="form-card">
+  <view class="info-title required">详细地址</view>
+  <textarea class="form-textarea" placeholder="如：江汉路1515号天街2F" value="{{detail}}" bindinput="onDetailInput" />
+  <text class="form-hint">完整地址将自动拼装为：杭州市{{district || '（请选择区域）'}}{{detail || ''}}</text>
+</view>
+
+<!-- 提交 -->
+<view class="bottom-submit">
+  <button class="submit-btn" bindtap="submitRegister">登记并绑定该门店</button>
+</view>
