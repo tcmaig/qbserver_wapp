@@ -1,40 +1,7 @@
-const app = getApp()
-
-// 统一请求方法
-const request = (options) => {
-  return new Promise((resolve, reject) => {
-    const token = wx.getStorageSync('token') || ''
-
-    wx.request({
-      url: app.globalData.apiBase + options.url,
-      method: options.method || 'GET',
-      data: options.data || {},
-      header: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-        ...(options.header || {})
-      },
-      success: (res) => {
-        if (res.statusCode === 401) {
-          wx.removeStorageSync('token')
-          wx.removeStorageSync('user')
-          wx.reLaunch({
-            url: '/pages/login/index'
-          })
-          reject({ code: 401, message: '请重新登录' })
-          return
-        }
-        resolve(res.data)
-      },
-      fail: (err) => {
-        reject(err)
-      }
-    })
-  })
-}
+const { request } = require('./request.js')
 
 // 微信登录（code 登录 + 获取手机号）
-export const wxLogin = (data) => {
+const wxLogin = (data) => {
   return request({
     url: '/wx/login',
     method: 'POST',
@@ -43,7 +10,7 @@ export const wxLogin = (data) => {
 }
 
 // 获取用户信息
-export const getUserInfo = () => {
+const getUserInfo = () => {
   return request({
     url: '/me',
     method: 'GET'
@@ -51,7 +18,7 @@ export const getUserInfo = () => {
 }
 
 // 退出登录
-export const logout = () => {
+const logout = () => {
   return request({
     url: '/logout',
     method: 'POST'
@@ -59,7 +26,7 @@ export const logout = () => {
 }
 
 // 获取工单列表
-export const getOrders = (params) => {
+const getOrders = (params) => {
   return request({
     url: '/repairs',
     method: 'GET',
@@ -68,7 +35,7 @@ export const getOrders = (params) => {
 }
 
 // 获取未读消息数
-export const getUnreadCount = () => {
+const getUnreadCount = () => {
   return request({
     url: '/message/unreadCount',
     method: 'GET'
@@ -76,7 +43,7 @@ export const getUnreadCount = () => {
 }
 
 // 获取区域
-export const getRegions = () => {
+const getRegions = () => {
   return request({
     url: '/regions',
     method: 'GET'
@@ -84,7 +51,7 @@ export const getRegions = () => {
 }
 
 // 获取验证码
-export const getCode = (data) => {
+const getCode = (data) => {
   return request({
     url: '/codes',
     method: 'POST',
@@ -93,7 +60,7 @@ export const getCode = (data) => {
 }
 
 // 手机号验证码登录
-export const userLogin = (data) => {
+const userLogin = (data) => {
   return request({
     url: '/user/login',
     method: 'POST',
@@ -102,7 +69,7 @@ export const userLogin = (data) => {
 }
 
 // 绑定手机号（验证码方式）
-export const bindMobile = (data) => {
+const bindMobile = (data) => {
   return request({
     url: '/bind',
     method: 'POST',
@@ -110,7 +77,7 @@ export const bindMobile = (data) => {
   })
 }
 
-export default {
+module.exports = {
   wxLogin,
   getUserInfo,
   logout,
