@@ -1,4 +1,33 @@
-<!-- 步骤条 -->
+<!-- ========== 历史设备复用提示 ========== -->
+<view wx:if="{{showHistoryTip && historyDevices.length > 0}}" class="history-tip">
+  <view class="history-tip-header">
+    <text class="history-tip-icon">🔄</text>
+    <text class="history-tip-title">检测到您曾报修过以下设备</text>
+  </view>
+  <view class="history-tip-body">
+    <view 
+      class="history-device-item" 
+      wx:for="{{historyDevices}}" 
+      wx:key="id"
+      bindtap="reuseDevice" 
+      data-index="{{index}}"
+    >
+      <view class="history-device-info">
+        <text class="history-device-name">{{item.category}}</text>
+        <text class="history-device-brand">{{item.brand}}</text>
+        <text class="history-device-model">{{item.model}}</text>
+      </view>
+      <text class="history-device-time">{{item.time}}</text>
+      <text class="history-device-reuse">复用 ›</text>
+    </view>
+  </view>
+  <view class="history-tip-footer">
+    <button class="history-tip-skip" bindtap="skipHistory">跳过，手动选择</button>
+    <button class="history-tip-close" bindtap="closeHistoryTip">✕</button>
+  </view>
+</view>
+
+<!-- ========== 步骤条 ========== -->
 <view class="step-bar">
   <view class="step-item {{step >= 1 ? 'active' : ''}}">
     <view class="step-circle">1</view>
@@ -22,9 +51,10 @@
 </view>
 
 <!-- ============================================================ -->
-<!-- 第一步：选品类 -->
+<!-- 第一步：选品类（只有不显示历史提示时才显示） -->
 <!-- ============================================================ -->
-<view wx:if="{{step === 1}}" class="step-content">
+<view wx:if="{{step === 1 && !showHistoryTip}}" class="step-content">
+  <!-- 搜索框 -->
   <view class="search-box">
     <text class="search-icon">🔍</text>
     <input class="search-input" placeholder="搜索设备名称..." value="{{keyword}}" bindinput="onSearchInput" />
@@ -58,7 +88,7 @@
 <!-- ============================================================ -->
 <!-- 第二步：选品牌 -->
 <!-- ============================================================ -->
-<view wx:if="{{step === 2}}" class="step-content">
+<view wx:if="{{step === 2 && !showHistoryTip}}" class="step-content">
   <view class="step-header">
     <text class="step-header-title">已选：{{selectedCategoryName}}</text>
     <text class="step-header-change" bindtap="goToStep1">更换</text>
@@ -102,7 +132,7 @@
 <!-- ============================================================ -->
 <!-- 第三步：选型号 -->
 <!-- ============================================================ -->
-<view wx:if="{{step === 3}}" class="step-content">
+<view wx:if="{{step === 3 && !showHistoryTip}}" class="step-content">
   <view class="step-header">
     <text class="step-header-title">{{selectedCategoryName}} · {{selectedBrandName || brandOther}}</text>
     <text class="step-header-change" bindtap="goToStep2">更换</text>
@@ -146,7 +176,7 @@
 <!-- ============================================================ -->
 <!-- 第四步：填信息 -->
 <!-- ============================================================ -->
-<view wx:elif="{{step === 4}}" class="step-content">
+<view wx:elif="{{step === 4 && !showHistoryTip}}" class="step-content">
   <!-- 归属门店 -->
   <view class="store-card">
     <view class="store-icon">🏪</view>
@@ -161,8 +191,8 @@
   <view class="selected-info">
     <text class="selected-label">设备信息：</text>
     <text class="selected-tag">{{selectedCategoryName}}</text>
-    <text class="selected-tag">{{selectedBrandName || brandOther}}</text>
-    <text class="selected-tag">{{selectedModelName || modelOther}}</text>
+    <text class="selected-tag">{{selectedBrandName || brandOther || '未选'}}</text>
+    <text class="selected-tag">{{selectedModelName || modelOther || '未选'}}</text>
   </view>
 
   <!-- 报修标题 -->
@@ -171,7 +201,7 @@
     <input class="form-input" placeholder="简单描述问题，如：3楼空调不制冷" value="{{title}}" bindinput="onTitleInput" />
   </view>
 
-  <!-- ===== 故障描述（文本 + 图片上传） ===== -->
+  <!-- 故障描述 -->
   <view class="input-card">
     <view class="info-title required">故障描述</view>
     <textarea class="form-textarea" placeholder="请详细描述故障现象，便于维修人员快速判断..." value="{{desc}}" bindinput="onDescInput" maxlength="500" />
@@ -182,12 +212,10 @@
     <!-- 图片上传 -->
     <view class="upload-section">
       <view class="upload-grid">
-        <!-- 已上传的图片 -->
         <view class="upload-item" wx:for="{{images}}" wx:key="index">
           <image src="{{item}}" mode="aspectFill" class="upload-image" />
           <view class="upload-delete" catchtap="deleteImage" data-index="{{index}}">✕</view>
         </view>
-        <!-- 添加图片按钮（最多9张） -->
         <view wx:if="{{images.length < 9}}" class="upload-add" catchtap="chooseImage">
           <text class="upload-add-icon">+</text>
           <text class="upload-add-text">上传图片</text>
@@ -198,29 +226,23 @@
     </view>
   </view>
 
-  <!-- ===== 报修地址 ===== -->
+  <!-- 报修地址 -->
   <view class="input-card">
     <view class="info-title required">报修地址</view>
-    
-    <!-- 定位按钮 -->
     <view class="location-row" bindtap="getLocation">
       <text class="location-icon">📍</text>
       <text class="location-text">{{locationText || '点击获取当前位置'}}</text>
       <text class="location-action">定位</text>
     </view>
-
-    <!-- 手动输入详细地址 -->
     <input class="form-input" placeholder="请手动输入详细地址（楼栋/房间号）" value="{{addressDetail}}" bindinput="onAddressDetailInput" />
-    
     <view class="location-hint">
       <text>📍 已定位：{{locationAddress || '未定位'}}</text>
     </view>
   </view>
 
-  <!-- ===== 联系人信息 ===== -->
+  <!-- 联系人信息 -->
   <view class="input-card">
     <view class="info-title required">联系人信息</view>
-    
     <view class="contact-row">
       <view class="contact-field">
         <text class="contact-label">联系人</text>
@@ -231,7 +253,6 @@
         <input class="contact-input" type="number" placeholder="请输入手机号" value="{{contactPhone}}" bindinput="onContactPhoneInput" maxlength="11" />
       </view>
     </view>
-
     <view class="contact-tip">
       <text>✅ 已自动填充您的信息，可手动修改</text>
     </view>

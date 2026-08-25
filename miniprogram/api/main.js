@@ -77,6 +77,32 @@ const bindMobile = (data) => {
   })
 }
 
+// ========== 新增：历史设备复用接口 ==========
+
+// 获取历史报修设备列表
+const getHistoryDevices = () => {
+  return request({
+    url: '/repairs/history/devices',
+    method: 'GET'
+  })
+}
+
+// 获取工单详情（用于完整复用设备信息）
+const getOrderDetail = (id) => {
+  return request({
+    url: '/service-orders/' + id,
+    method: 'GET'
+  })
+}
+
+// 获取设备品类列表
+const getStoreDevices = () => {
+  return request({
+    url: '/store-devices',
+    method: 'GET'
+  })
+}
+
 module.exports = {
   wxLogin,
   getUserInfo,
@@ -86,5 +112,8 @@ module.exports = {
   getRegions,
   getCode,
   userLogin,
-  bindMobile
+  bindMobile,
+  getHistoryDevices,
+  getOrderDetail,
+  getStoreDevices
 }

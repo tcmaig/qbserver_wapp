@@ -1,4 +1,5 @@
 const { request } = require('../../utils/request.js')
+const {getHistoryDevices,getOrderDetail,getStoreDevices} = require('../../api/main.js')
 
 Page({
   data: {
@@ -60,6 +61,11 @@ Page({
     // ===== 联系人 =====
     contactName: '',
     contactPhone: '',
+
+    // ===== 历史设备复用 =====
+    showHistoryTip: false,
+    historyDevices: [],
+    isReusing: false,
   },
 
   // ================================================================
@@ -74,6 +80,8 @@ Page({
       contactPhone: wx.getStorageSync('userPhone') || '138****8888'
     })
     this.loadCategories()          // 加载设备品类
+    // 检查历史设备
+    this.checkHistoryDevices()
   },
   // ================================================================
   // 第一步：选品类
