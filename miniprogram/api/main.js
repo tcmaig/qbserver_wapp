@@ -81,7 +81,7 @@ const getOrders = (params) => {
 
 const getOrderDetail = (id) => {
   return request({
-    url: `/repairs/${id}`,
+    url: `/service/orders/${id}`,
     method: 'GET'
   })
 }
