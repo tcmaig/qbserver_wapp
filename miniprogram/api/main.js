@@ -1,6 +1,27 @@
 const { request } = require('./request.js')
 
-// 微信登录（code 登录 + 获取手机号）
+// 无需登录的请求（不自动带 token）
+const publicRequest = (options) => {
+  return new Promise((resolve, reject) => {
+    const app = getApp()
+    wx.request({
+      url: app.globalData.apiBase + options.url,
+      method: options.method || 'POST',
+      data: options.data || {},
+      header: {
+        'Content-Type': 'application/json'
+      },
+      success: (res) => {
+        resolve(res.data)
+      },
+      fail: (err) => {
+        reject(err)
+      }
+    })
+  })
+}
+
+// ===== 微信登录 =====
 const wxLogin = (data) => {
   return request({
     url: '/wx/login',
@@ -9,7 +30,7 @@ const wxLogin = (data) => {
   })
 }
 
-// 获取用户信息
+// ===== 用户相关 =====
 const getUserInfo = () => {
   return request({
     url: '/me',
@@ -17,7 +38,6 @@ const getUserInfo = () => {
   })
 }
 
-// 退出登录
 const logout = () => {
   return request({
     url: '/logout',
@@ -25,7 +45,32 @@ const logout = () => {
   })
 }
 
-// 获取工单列表
+// ===== 报修申请（无需登录，不传 token） =====
+const submitRepairRequest = (data) => {
+  return publicRequest({
+    url: '/repair-requests',
+    method: 'POST',
+    data
+  })
+}
+
+const getRepairProgress = (id, mobile) => {
+  return request({
+    url: `/repair-requests/${id}/progress`,
+    method: 'GET',
+    data: { mobile }
+  })
+}
+
+const cancelRepairRequest = (id, mobile) => {
+  return request({
+    url: `/repair-requests/${id}/cancel`,
+    method: 'POST',
+    data: { mobile }
+  })
+}
+
+// ===== 工单 =====
 const getOrders = (params) => {
   return request({
     url: '/repairs',
@@ -34,7 +79,46 @@ const getOrders = (params) => {
   })
 }
 
-// 获取未读消息数
+const getOrderDetail = (id) => {
+  return request({
+    url: `/repairs/${id}`,
+    method: 'GET'
+  })
+}
+
+// ===== 设备目录 =====
+const getDeviceCategories = () => {
+  return request({
+    url: '/product/deviceCategories',
+    method: 'GET'
+  })
+}
+
+const getDeviceBrands = (params) => {
+  return request({
+    url: '/device-brands',
+    method: 'GET',
+    data: params
+  })
+}
+
+const getDeviceModels = (params) => {
+  return request({
+    url: '/device-models',
+    method: 'GET',
+    data: params
+  })
+}
+
+// ===== 历史设备复用 =====
+const getHistoryDevices = () => {
+  return request({
+    url: '/repairs/history/devices',
+    method: 'GET'
+  })
+}
+
+// ===== 消息 =====
 const getUnreadCount = () => {
   return request({
     url: '/message/unreadCount',
@@ -42,7 +126,7 @@ const getUnreadCount = () => {
   })
 }
 
-// 获取区域
+// ===== 其他 =====
 const getRegions = () => {
   return request({
     url: '/regions',
@@ -50,7 +134,6 @@ const getRegions = () => {
   })
 }
 
-// 获取验证码
 const getCode = (data) => {
   return request({
     url: '/codes',
@@ -59,7 +142,6 @@ const getCode = (data) => {
   })
 }
 
-// 手机号验证码登录
 const userLogin = (data) => {
   return request({
     url: '/user/login',
@@ -68,7 +150,6 @@ const userLogin = (data) => {
   })
 }
 
-// 绑定手机号（验证码方式）
 const bindMobile = (data) => {
   return request({
     url: '/bind',
@@ -77,43 +158,22 @@ const bindMobile = (data) => {
   })
 }
 
-// ========== 新增：历史设备复用接口 ==========
-
-// 获取历史报修设备列表
-const getHistoryDevices = () => {
-  return request({
-    url: '/repairs/history/devices',
-    method: 'GET'
-  })
-}
-
-// 获取工单详情（用于完整复用设备信息）
-const getOrderDetail = (id) => {
-  return request({
-    url: '/service-orders/' + id,
-    method: 'GET'
-  })
-}
-
-// 获取设备品类列表
-const getStoreDevices = () => {
-  return request({
-    url: '/store-devices',
-    method: 'GET'
-  })
-}
-
 module.exports = {
   wxLogin,
   getUserInfo,
   logout,
+  submitRepairRequest,
+  getRepairProgress,
+  cancelRepairRequest,
   getOrders,
+  getOrderDetail,
+  getDeviceCategories,
+  getDeviceBrands,
+  getDeviceModels,
+  getHistoryDevices,
   getUnreadCount,
   getRegions,
   getCode,
   userLogin,
-  bindMobile,
-  getHistoryDevices,
-  getOrderDetail,
-  getStoreDevices
+  bindMobile
 }

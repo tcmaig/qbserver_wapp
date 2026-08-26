@@ -177,8 +177,8 @@
 <!-- 第四步：填信息 -->
 <!-- ============================================================ -->
 <view wx:elif="{{step === 4 && !showHistoryTip}}" class="step-content">
-  <!-- 归属门店 -->
-  <view class="store-card">
+  <!-- ===== 归属门店（快速报修隐藏） ===== -->
+  <view wx:if="{{false}}" class="store-card">
     <view class="store-icon">🏪</view>
     <view>
       <text class="store-label">归属门店</text>
