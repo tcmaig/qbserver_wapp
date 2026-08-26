@@ -73,7 +73,7 @@ const cancelRepairRequest = (id, mobile) => {
 // ===== 工单 =====
 const getOrders = (params) => {
   return request({
-    url: '/repairs',
+    url: '/service/orders',
     method: 'GET',
     data: params
   })
@@ -86,7 +86,7 @@ const getOrderDetail = (id) => {
   })
 }
 
-// ===== 设备目录 =====
+// ===== 设备目录（需要登录） =====
 const getDeviceCategories = () => {
   return request({
     url: '/product/deviceCategories',

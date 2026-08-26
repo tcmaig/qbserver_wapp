@@ -1,5 +1,4 @@
-// 从 mock.ts 导入数据（在小程序中用 require）
-const mockData = require('../../utils/mock.js')
+const { getUserInfo, getOrders } = require('../../api/main.js')
 
 function parseDate(dateStr) {
   if (!dateStr) return new Date(0);
@@ -25,7 +24,7 @@ function parseDate(dateStr) {
 
 Page({
   data: {
-    storeName: '壹咖·万象城店',
+    storeName: '加载中...',  // 先显示加载中
     unreadCount: 3,
     banners: [
       { title: '壹咖保障 · 报修无忧', subtitle: '统一维修服务，全程可追踪', tag: '服务保障' },
@@ -46,18 +45,92 @@ Page({
   },
 
   onLoad() {
-    this.loadData()
+    this.loadStoreInfo()
+    this.loadOrders()
   },
 
   onShow() {
-    this.loadData()
+    this.loadStoreInfo()
+    this.loadOrders()
   },
 
-  loadData() {
-    // 从 mock 数据加载工单
-    const orders = mockData.workOrders || []
-    
-    // 统计各状态数量
+  // ===== 加载门店信息 =====
+  loadStoreInfo() {
+    const token = wx.getStorageSync('token')
+    if (!token) {
+      this.setData({ storeName: '请登录' })
+      return
+    }
+
+    getUserInfo().then(data => {
+      if (data.success && data.data) {
+        const user = data.data
+        // 从用户信息中获取门店名称
+        const storeName = user.store_name || user.storeName || user.bound_store_name || ''
+        if (storeName) {
+          this.setData({ storeName: storeName })
+        } else {
+          this.setData({ storeName: '无绑定门店' })
+        }
+        // 保存用户信息到缓存
+        wx.setStorageSync('user', user)
+      } else {
+        // 接口失败，从缓存读取
+        const user = wx.getStorageSync('user')
+        if (user && (user.store_name || user.storeName)) {
+          this.setData({ storeName: user.store_name || user.storeName })
+        } else {
+          this.setData({ storeName: '无绑定门店' })
+        }
+      }
+    }).catch(() => {
+      // 接口报错，从缓存读取
+      const user = wx.getStorageSync('user')
+      if (user && (user.store_name || user.storeName)) {
+        this.setData({ storeName: user.store_name || user.storeName })
+      } else {
+        this.setData({ storeName: '无绑定门店' })
+      }
+    })
+  },
+
+  // ===== 加载工单数据 =====
+  loadOrders() {
+    const token = wx.getStorageSync('token')
+    if (!token) {
+      // 未登录，使用 mock 数据或显示空
+      this.setData({
+        totalOrders: 0,
+        pendingOrders: 0,
+        repairingOrders: 0,
+        acceptOrders: 0,
+        recentOrders: []
+      })
+      return
+    }
+
+    getOrders({ page: 1, limit: 20 }).then(data => {
+      if (data.success && data.data) {
+        const orders = data.data.data || []
+        this.processOrders(orders)
+      } else {
+        // 接口返回失败，显示空数据
+        this.setData({
+          totalOrders: 0,
+          pendingOrders: 0,
+          repairingOrders: 0,
+          acceptOrders: 0,
+          recentOrders: []
+        })
+      }
+    }).catch(() => {
+      // 接口报错，使用 mock 数据
+      this.loadMockData()
+    })
+  },
+
+  // ===== 处理工单数据 =====
+  processOrders(orders) {
     const total = orders.length
     const pending = orders.filter(o => o.status === 0 || o.status === 1).length
     const repairing = orders.filter(o => o.status === 3 || o.status === 4).length
@@ -66,14 +139,54 @@ Page({
     // 最近3条工单（按时间排序）
     const recent = orders
       .slice()
-      .sort((a, b) => {
-        const dateA = parseDate(a.createdAt);
-        const dateB = parseDate(b.createdAt);
-        return dateB - dateA;
-      })
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       .slice(0, 3)
       .map(o => {
-        // 状态标签映射
+        const statusMap = {
+          0: { label: '待审核', class: 'pending' },
+          1: { label: '已派单', class: 'dispatched' },
+          2: { label: '已接单', class: 'accepted' },
+          3: { label: '维修中', class: 'repair' },
+          4: { label: '待验收', class: 'accept' },
+          5: { label: '已完成', class: 'done' },
+          6: { label: '已驳回', class: 'rejected' },
+          7: { label: '已关闭', class: 'closed' }
+        }
+        const statusInfo = statusMap[o.status] || { label: '未知', class: 'pending' }
+        return {
+          id: o.id,
+          title: o.title || '未命名工单',
+          location: o.address || o.location || '未指定地点',
+          statusLabel: statusInfo.label,
+          statusClass: statusInfo.class,
+          time: o.created_at ? o.created_at.slice(5, 16) : ''
+        }
+      })
+
+    this.setData({
+      totalOrders: total,
+      pendingOrders: pending,
+      repairingOrders: repairing,
+      acceptOrders: done,
+      recentOrders: recent
+    })
+  },
+
+  // ===== Mock 数据（接口不可用时使用） =====
+  loadMockData() {
+    const mockData = require('../../utils/mock.js')
+    const orders = mockData.workOrders || []
+    
+    const total = orders.length
+    const pending = orders.filter(o => o.status === 0 || o.status === 1).length
+    const repairing = orders.filter(o => o.status === 3 || o.status === 4).length
+    const done = orders.filter(o => o.status === 5).length
+
+    const recent = orders
+      .slice()
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 3)
+      .map(o => {
         const statusMap = {
           0: { label: '待审核', class: 'pending' },
           1: { label: '已派单', class: 'dispatched' },
@@ -91,7 +204,7 @@ Page({
           location: o.location,
           statusLabel: statusInfo.label,
           statusClass: statusInfo.class,
-          time: o.createdAt.slice(5, 16)
+          time: o.createdAt ? o.createdAt.slice(5, 16) : ''
         }
       })
 
@@ -104,6 +217,7 @@ Page({
     })
   },
 
+  // ===== 跳转方法 =====
   goToStoreList() {
     wx.navigateTo({ url: '/pages/store/index' })
   },

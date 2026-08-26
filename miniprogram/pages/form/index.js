@@ -127,7 +127,7 @@ Page({
       const data = await getDeviceCategories()
       wx.hideLoading()
 
-      if (data.success && data.data) {
+      if (data.success && data.data && data.data.length > 0) {
         const categories = data.data.map(item => ({
           id: item.id,
           name: item.name,
@@ -139,6 +139,7 @@ Page({
           filteredCategories: categories
         })
       } else {
+        // 后端无数据时使用默认数据
         this.setData({
           categories: this.getDefaultCategories(),
           filteredCategories: this.getDefaultCategories()
@@ -147,6 +148,7 @@ Page({
     } catch (err) {
       wx.hideLoading()
       console.error('加载品类失败', err)
+      // 接口报错时使用默认数据
       this.setData({
         categories: this.getDefaultCategories(),
         filteredCategories: this.getDefaultCategories()
