@@ -560,21 +560,30 @@ Page({
     })
 
     const doSubmit = (imageUrls) => {
-      // 👇 字段名对齐后端：device_type, brand_name, model_name
-      submitRepairRequest({
-        device_type: selectedCategoryName,
-        brand_name: brand,
-        model_name: model,
-        title: title.trim(),
-        description: desc.trim(),
-        urgency: urgency,
-        address: fullAddress,
-        contact_name: contactName.trim(),
-        contact_phone: contactPhone.trim(),
-        images: imageUrls,
-        latitude: this.data.latitude || '',
-        longitude: this.data.longitude || ''
-      }).then(data => {
+      const postData = {
+        reporter_name: contactName.trim(),
+        reporter_phone: contactPhone.trim(),
+        device_type_name: selectedCategoryName || '其他',
+        device_brand_name: brand || '其他',
+        device_model_name: model || '其他',
+        fault_description: desc.trim(),
+        address: fullAddress || '未填写'
+      }
+    
+      // 如果有图片
+      if (imageUrls && imageUrls.length > 0) {
+        postData.images = imageUrls
+      }
+    
+      // 如果有坐标
+      if (this.data.latitude) {
+        postData.location_lat = this.data.latitude
+        postData.location_lng = this.data.longitude
+      }
+    
+      console.log('【提交数据】', postData)
+    
+      submitRepairRequest(postData).then(data => {
         wx.hideLoading()
         if (data.success) {
           wx.showToast({ title: '提交成功！', icon: 'success' })
@@ -586,7 +595,8 @@ Page({
         }
       }).catch(err => {
         wx.hideLoading()
-        wx.showToast({ title: '网络请求失败', icon: 'none' })
+        console.error('提交失败', err)
+        wx.showToast({ title: '提交失败，请重试', icon: 'none' })
       })
     }
 
