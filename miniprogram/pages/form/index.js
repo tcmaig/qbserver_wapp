@@ -14,6 +14,8 @@ Page({
     showHistoryTip: false,
     historyDevices: [],
     isReusing: false,
+    reporterPhone: '',  // 用户输入的手机号
+    isPhoneChecked: false,  // 是否已查询过
 
     // ===== 设备目录数据 =====
     categories: [],
@@ -64,51 +66,105 @@ Page({
     const user = wx.getStorageSync('user') || {}
     this.setData({
       contactName: user.nickname || user.name || '',
-      contactPhone: user.mobile || user.phone || ''
+      contactPhone: user.mobile || user.phone || '',
+      reporterPhone: user.mobile || user.phone || ''
     })
     this.loadCategories()
-    this.checkHistoryDevices()
-  },
-
-  // ===== 历史设备复用 =====
-  async checkHistoryDevices() {
-    const token = wx.getStorageSync('token')
-    if (!token) return
-
-    try {
-      const data = await getHistoryDevices()
-      if (data.success && data.data && data.data.length > 0) {
-        const devices = data.data.map(item => ({
-          id: item.id,
-          category: item.category || item.device_type || '设备',
-          brand: item.brand || '',
-          model: item.model || '',
-          time: item.created_at || item.time || '',
-          orderId: item.order_id || item.id
-        }))
-        this.setData({
-          historyDevices: devices,
-          showHistoryTip: true
-        })
-      }
-    } catch (err) {
-      console.error('获取历史设备失败', err)
+    if (this.data.reporterPhone) {
+      this.checkHistoryDevices(this.data.reporterPhone)
     }
   },
 
+  // ===== 历史设备复用 =====
+  checkHistoryDevices(phone) {
+    if (!phone || phone.length < 11) {
+      return
+    }
+  
+    wx.showLoading({ title: '查询中...' })
+  
+    getHistoryDevices(phone).then(data => {
+      wx.hideLoading()
+  
+      if (data.success && data.data && data.data.length > 0) {
+        const devices = data.data.map(item => ({
+          id: item.id,
+          type: item.type,
+          device_id: item.device_id,
+          name: item.name || item.device_type_name || '设备',
+          brand: item.device_brand_name || '',
+          model: item.device_model_name || '',
+          time: item.last_repair_at || '',
+          repair_count: item.repair_count || 1,
+          warranty_status: item.warranty_status || '未知',
+          device_type_name: item.device_type_name,
+          device_brand_name: item.device_brand_name,
+          device_model_name: item.device_model_name,
+          device_sn: item.device_sn
+        }))
+  
+        this.setData({
+          historyDevices: devices,
+          showHistoryTip: true,
+          isPhoneChecked: true
+        })
+      } else {
+        this.setData({
+          historyDevices: [],
+          showHistoryTip: false,
+          isPhoneChecked: true
+        })
+        // 没有历史设备，直接进入第一步
+        this.setData({ step: 1 })
+      }
+    }).catch(err => {
+      wx.hideLoading()
+      console.error('查询历史设备失败', err)
+      this.setData({
+        historyDevices: [],
+        showHistoryTip: false,
+        isPhoneChecked: true
+      })
+      this.setData({ step: 1 })
+    })
+  },
+
+  // ===== 复用历史设备 =====
   reuseDevice(e) {
     const index = e.currentTarget.dataset.index
     const device = this.data.historyDevices[index]
 
     this.setData({
       showHistoryTip: false,
-      selectedCategoryName: device.category,
-      selectedBrandName: device.brand,
-      selectedModelName: device.model,
-      step: 4
+      isReusing: true
     })
 
-    wx.showToast({ title: '已复用设备信息', icon: 'success' })
+    wx.showLoading({ title: '加载设备信息...' })
+
+    if (device.type === 'device' && device.device_id) {
+      // 实体设备：通过 device_id 关联
+      this.setData({
+        selectedDeviceId: device.device_id,
+        selectedCategoryName: device.device_type_name || device.name,
+        selectedBrandName: device.device_brand_name || '',
+        selectedModelName: device.device_model_name || '',
+        step: 4  // 直接跳到填信息
+      })
+      wx.hideLoading()
+      wx.showToast({ title: '已复用设备信息', icon: 'success' })
+    } else {
+      // 快照设备：填充三级信息
+      this.setData({
+        selectedCategoryName: device.device_type_name || device.name,
+        selectedBrandName: device.device_brand_name || '',
+        selectedModelName: device.device_model_name || '',
+        step: 4
+      })
+      wx.hideLoading()
+      wx.showToast({ title: '已复用设备信息', icon: 'success' })
+    }
+
+    this.setData({ isReusing: false })
   },
 
   skipHistory() {
@@ -494,8 +550,18 @@ Page({
     this.setData({ contactName: e.detail.value })
   },
 
+ // ===== 联系人手机号输入 =====
   onContactPhoneInput(e) {
-    this.setData({ contactPhone: e.detail.value })
+    const phone = e.detail.value
+    this.setData({ 
+      contactPhone: phone,
+      reporterPhone: phone,
+      isPhoneChecked: false
+    })
+    // 输入完整手机号后自动查询
+    if (phone && phone.length === 11) {
+      this.checkHistoryDevices(phone)
+    }
   },
 
   // ===== 提交报修 =====
@@ -570,6 +636,16 @@ Page({
         device_model_name: model || '其他',
         fault_description: desc.trim(),
         address: fullAddress || '未填写'
+      }
+
+      // 如果有选中的实体设备，传 device_id
+      if (this.data.selectedDeviceId) {
+        postData.device_id = this.data.selectedDeviceId
+      } else {
+        // 否则传三级信息
+        postData.device_type_name = selectedCategoryName || '其他'
+        postData.device_brand_name = brand || '其他'
+        postData.device_model_name = model || '其他'
       }
     
       // 如果有图片

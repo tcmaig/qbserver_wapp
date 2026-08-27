@@ -111,9 +111,9 @@ const getDeviceModels = (params) => {
 }
 
 // ===== 历史设备复用 =====
-const getHistoryDevices = () => {
-  return request({
-    url: '/repairs/history/devices',
+const getHistoryDevices = (phone) => {
+  return publicRequest({
+    url: '/repair-requests/history-devices?reporter_phone=' + phone,
     method: 'GET'
   })
 }
