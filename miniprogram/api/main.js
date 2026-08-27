@@ -70,6 +70,60 @@ const cancelRepairRequest = (id, mobile) => {
   })
 }
 
+// ===== 商城 =====
+const getCategories = () => {
+  return request({
+    url: '/product/categories',
+    method: 'GET'
+  })
+}
+
+const getProducts = (params) => {
+  return request({
+    url: '/products',
+    method: 'GET',
+    data: params
+  })
+}
+
+const getProductDetail = (id) => {
+  return request({
+    url: `/products/${id}`,
+    method: 'GET'
+  })
+}
+
+// 购物车
+const getCart = () => {
+  return request({
+    url: '/carts',
+    method: 'GET'
+  })
+}
+
+const addToCart = (data) => {
+  return request({
+    url: '/carts',
+    method: 'POST',
+    data
+  })
+}
+
+const updateCart = (data) => {
+  return request({
+    url: '/carts',
+    method: 'PUT',
+    data
+  })
+}
+
+const deleteCartItem = (id) => {
+  return request({
+    url: `/carts/${id}`,
+    method: 'DELETE'
+  })
+}
+
 // ===== 工单 =====
 const getOrders = (params) => {
   return request({
@@ -165,6 +219,13 @@ module.exports = {
   submitRepairRequest,
   getRepairProgress,
   cancelRepairRequest,
+  getCategories,
+  getProducts,
+  getProductDetail,
+  getCart,
+  addToCart,
+  updateCart,
+  deleteCartItem,
   getOrders,
   getOrderDetail,
   getDeviceCategories,

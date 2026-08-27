@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "壹咖商城",
-  "usingComponents": {}
+  "usingComponents": {},
+  "enablePullDownRefresh": true
 }

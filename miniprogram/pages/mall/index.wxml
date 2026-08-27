@@ -15,36 +15,26 @@
   <!-- 左侧主分类 -->
   <scroll-view class="category-left" scroll-y="{{true}}">
     <view 
-      class="category-left-item {{mainKey === item.key ? 'active' : ''}}" 
+      class="category-left-item {{mainKey === item.id ? 'active' : ''}}" 
       wx:for="{{categories}}" 
-      wx:key="key"
+      wx:key="id"
       bindtap="selectMain" 
-      data-key="{{item.key}}"
+      data-key="{{item.id}}"
     >
-      <text>{{item.label}}</text>
+      <text>{{item.title}}</text>
     </view>
   </scroll-view>
 
   <!-- 右侧子分类 -->
   <scroll-view class="category-right" scroll-y="{{true}}">
-    <view class="sub-section" wx:for="{{currentMain.subs}}" wx:key="key">
-      <view class="sub-header" bindtap="openSubCategory" data-key="{{item.key}}">
-        <text class="sub-title">{{item.label}}</text>
+    <view class="sub-section" wx:for="{{subCategories}}" wx:key="id">
+      <view class="sub-header" bindtap="openSubCategory" data-id="{{item.id}}" data-title="{{item.title}}">
+        <text class="sub-title">{{item.title}}</text>
         <text class="sub-arrow">›</text>
       </view>
-      <view class="sub-items">
-        <view 
-          class="sub-item" 
-          wx:for="{{item.leaves}}" 
-          wx:key="key"
-          bindtap="openLeaf" 
-          data-key="{{item.key}}"
-          data-title="{{item.label}}"
-        >
-          <view class="sub-item-icon bg-{{item.bg}}">{{item.icon}}</view>
-          <text class="sub-item-label">{{item.label}}</text>
-        </view>
-      </view>
+    </view>
+    <view wx:if="{{subCategories.length === 0}}" class="sub-empty">
+      <text>暂无子分类</text>
     </view>
   </scroll-view>
 </view>
@@ -60,15 +50,16 @@
       bindtap="goToProductDetail" 
       data-id="{{item.id}}"
     >
-      <view class="product-image bg-{{item.bg}}">
-        <text class="product-icon">{{item.icon}}</text>
+      <view class="product-image">
+        <image wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFill" class="product-image-src" />
+        <view wx:else class="product-image-placeholder">📦</view>
         <view wx:if="{{item.discount}}" class="product-tag">{{item.discount}}折</view>
       </view>
       <view class="product-info">
         <text class="product-name">{{item.name}}</text>
         <text class="product-spec">{{item.spec}}</text>
         <view class="product-bottom">
-          <text class="product-price">¥{{item.price}}</text>
+          <text class="product-price">{{item.price ? '¥' + item.price : '询价'}}</text>
           <view class="product-cart-btn" catchtap="addToCart" data-id="{{item.id}}">
             <text>+</text>
           </view>
@@ -76,4 +67,8 @@
       </view>
     </view>
   </view>
+
+  <!-- 加载更多 -->
+  <view wx:if="{{loading}}" class="loading-more">加载中...</view>
+  <view wx:if="{{!hasMore && products.length > 0}}" class="no-more">已加载全部商品</view>
 </view>
