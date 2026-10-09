@@ -1,0 +1,121 @@
+<!-- 顶部导航 -->
+<view class="header">
+  <view class="header-left" bindtap="goToStoreList">
+    <text class="store-name">{{storeName}}</text>
+    <text class="store-arrow">▼</text>
+  </view>
+  <view class="header-right" bindtap="goToMessage">
+    <text class="icon-bell">🔔</text>
+    <view wx:if="{{unreadCount > 0}}" class="badge-dot">{{unreadCount > 99 ? '99+' : unreadCount}}</view>
+  </view>
+</view>
+
+<!-- Banner -->
+<view class="banner-wrapper">
+  <swiper 
+    class="banner-swiper" 
+    indicator-dots="{{true}}" 
+    indicator-color="rgba(255,255,255,0.4)" 
+    indicator-active-color="#ffffff" 
+    autoplay="{{true}}" 
+    interval="{{3500}}" 
+    circular="{{true}}"
+  >
+    <swiper-item wx:for="{{banners}}" wx:key="title">
+      <!-- 👇 用 index 控制颜色 -->
+      <view class="banner-item-inner banner-bg-{{index}}">
+        <view class="banner-content">
+          <view class="banner-tag">{{item.tag}}</view>
+          <text class="banner-title">{{item.title}}</text>
+          <text class="banner-sub">{{item.subtitle}}</text>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+</view>
+
+<!-- 金刚区 -->
+<view class="kengang">
+  <view class="kengang-left" bindtap="goToForm">
+    <view class="kengang-left-top">
+      <view class="kengang-left-icon">⚡</view>
+      <text class="kengang-left-title">快速报修</text>
+    </view>
+    <text class="kengang-left-sub">立即报修 ></text>
+  </view>
+  <view class="kengang-right">
+    <view class="kengang-item" bindtap="goToInstall">
+      <view class="kengang-item-icon icon-install">🔧</view>
+      <text>安装</text>
+    </view>
+    <view class="kengang-item" bindtap="goToPurchase">
+      <view class="kengang-item-icon icon-purchase">🛒</view>
+      <text>采购</text>
+    </view>
+    <view class="kengang-item" bindtap="goToMaintain">
+      <view class="kengang-item-icon icon-maintain">🛠️</view>
+      <text>保养</text>
+    </view>
+    <view class="kengang-item" bindtap="goToMaterial">
+      <view class="kengang-item-icon icon-material">📦</view>
+      <text>耗材</text>
+    </view>
+  </view>
+</view>
+
+<!-- 我的工单 -->
+<view class="order-section">
+  <view class="section-header">
+    <text class="section-title">我的工单</text>
+    <text class="section-more" bindtap="goToOrders">查看全部 ></text>
+  </view>
+
+  <view class="stats-row">
+    <view class="stats-item" bindtap="goToOrders">
+      <text class="stats-number">{{totalOrders}}</text>
+      <text class="stats-label">全部工单</text>
+    </view>
+    <view class="stats-item" bindtap="goToOrders">
+      <text class="stats-number">{{pendingOrders}}</text>
+      <text class="stats-label">待审核</text>
+    </view>
+    <view class="stats-item" bindtap="goToOrders">
+      <text class="stats-number">{{repairingOrders}}</text>
+      <text class="stats-label">维修中</text>
+    </view>
+    <view class="stats-item" bindtap="goToOrders">
+      <text class="stats-number">{{acceptOrders}}</text>
+      <text class="stats-label">待验收</text>
+    </view>
+  </view>
+
+  <view class="orders-list">
+    <view 
+      class="order-item" 
+      wx:for="{{recentOrders}}" 
+      wx:key="id"
+      bindtap="goToOrderDetail" 
+      data-id="{{item.id}}"
+    >
+      <view class="order-left">
+        <text class="order-title">{{item.title}}</text>
+        <text class="order-location">{{item.location}}</text>
+      </view>
+      <view class="order-right">
+        <text class="order-status status-{{item.statusClass}}">{{item.statusLabel}}</text>
+        <text class="order-time">{{item.time}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 常用功能 -->
+<view class="tools-section">
+  <text class="section-title">常用功能</text>
+  <view class="tools-grid">
+    <view class="tool-item" wx:for="{{tools}}" wx:key="label" bindtap="{{item.tap}}">
+      <view class="tool-icon bg-{{item.color}}">{{item.icon}}</view>
+      <text class="tool-label">{{item.label}}</text>
+    </view>
+  </view>
+</view>
