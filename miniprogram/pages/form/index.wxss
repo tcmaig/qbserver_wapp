@@ -1,0 +1,763 @@
+/* ===== 步骤条 ===== */
+.step-bar {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 16rpx 20rpx;
+  background: #ffffff;
+  margin: 0 0 16rpx;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.step-circle {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #999;
+  font-size: 22rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-item.active .step-circle {
+  background: #07C160;
+  color: #ffffff;
+}
+
+.step-label {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.step-item.active .step-label {
+  color: #07C160;
+  font-weight: 500;
+}
+
+.step-line {
+  flex: 1;
+  height: 3rpx;
+  background: #e5e7eb;
+  margin: 0 6rpx;
+  margin-bottom: 30rpx;
+}
+
+.step-line.active {
+  background: #07C160;
+}
+
+/* ===== 通用 ===== */
+.step-content {
+  padding-bottom: 20rpx;
+}
+
+/* ===== 步骤标题 ===== */
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24rpx 16rpx;
+}
+
+.step-header-title {
+  font-size: 28rpx;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.step-header-change {
+  font-size: 24rpx;
+  color: #07C160;
+}
+
+/* ===== 搜索框 ===== */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 32rpx;
+  padding: 0 24rpx;
+  margin: 0 24rpx 16rpx;
+}
+
+.search-icon {
+  font-size: 28rpx;
+  color: #999;
+  margin-right: 12rpx;
+}
+
+.search-input {
+  flex: 1;
+  height: 68rpx;
+  font-size: 26rpx;
+  color: #1a1a1a;
+}
+
+.search-clear {
+  font-size: 28rpx;
+  color: #999;
+  padding: 8rpx;
+}
+
+/* ===== 品类网格 ===== */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+  padding: 0 24rpx;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx 8rpx 20rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+  border: 2rpx solid transparent;
+  position: relative;
+}
+
+.category-item.selected {
+  border-color: #07C160;
+  background: #f0fdf4;
+}
+
+.category-icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+}
+
+.category-name {
+  font-size: 22rpx;
+  color: #1a1a1a;
+  margin-top: 10rpx;
+  text-align: center;
+}
+
+.category-check {
+  position: absolute;
+  top: 6rpx;
+  right: 6rpx;
+  width: 28rpx;
+  height: 28rpx;
+  background: #07C160;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== 品牌网格 ===== */
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+  padding: 0 24rpx;
+}
+
+.brand-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 18rpx;
+  background: #ffffff;
+  border-radius: 12rpx;
+  border: 2rpx solid #e5e7eb;
+}
+
+.brand-item.selected {
+  border-color: #07C160;
+  background: #f0fdf4;
+}
+
+.brand-name {
+  font-size: 26rpx;
+  color: #1a1a1a;
+}
+
+.brand-check {
+  font-size: 22rpx;
+  color: #07C160;
+  font-weight: 600;
+}
+
+/* ===== 型号网格 ===== */
+.model-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+  padding: 0 24rpx;
+}
+
+.model-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18rpx 18rpx;
+  background: #ffffff;
+  border-radius: 12rpx;
+  border: 2rpx solid #e5e7eb;
+}
+
+.model-item.selected {
+  border-color: #07C160;
+  background: #f0fdf4;
+}
+
+.model-name {
+  font-size: 24rpx;
+  color: #1a1a1a;
+}
+
+.model-check {
+  font-size: 22rpx;
+  color: #07C160;
+  font-weight: 600;
+}
+
+/* ===== 自定义输入 ===== */
+.custom-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx 24rpx;
+  margin: 12rpx 24rpx 0;
+  background: #ffffff;
+  border-radius: 12rpx;
+  border: 1rpx solid #e5e7eb;
+}
+
+.custom-label {
+  font-size: 24rpx;
+  color: #999;
+  white-space: nowrap;
+}
+
+.custom-input {
+  flex: 1;
+  height: 60rpx;
+  font-size: 26rpx;
+  color: #1a1a1a;
+}
+
+/* ===== 已选设备信息 ===== */
+.selected-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx 24rpx;
+  margin: 0 24rpx 16rpx;
+  background: #f0fdf4;
+  border-radius: 12rpx;
+  border-left: 4rpx solid #07C160;
+}
+
+.selected-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.selected-tag {
+  font-size: 24rpx;
+  color: #07C160;
+  background: #ffffff;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  border: 1rpx solid #07C160;
+}
+
+/* ===== 归属门店 ===== */
+.store-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  background: #ffffff;
+  margin: 0 24rpx 16rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+}
+
+.store-icon {
+  font-size: 32rpx;
+}
+
+.store-label {
+  font-size: 22rpx;
+  color: #999;
+  display: block;
+}
+
+.store-name {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #1a1a1a;
+  display: block;
+}
+
+.store-badge {
+  font-size: 20rpx;
+  color: #07C160;
+  background: #f0fdf4;
+  padding: 4rpx 14rpx;
+  border-radius: 20rpx;
+  margin-left: auto;
+}
+
+/* ===== 输入卡片 ===== */
+.input-card {
+  background: #ffffff;
+  margin: 0 24rpx 16rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+}
+
+.info-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  padding-left: 14rpx;
+  border-left: 4rpx solid #07C160;
+}
+
+.info-title.required::after {
+  content: '*';
+  color: #ef4444;
+  margin-left: 4rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 72rpx;
+  padding: 0 16rpx;
+  background: #f9fafb;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  margin-top: 12rpx;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  width: 100%;
+  min-height: 140rpx;
+  padding: 16rpx;
+  background: #f9fafb;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  margin-top: 12rpx;
+  box-sizing: border-box;
+}
+
+.char-count {
+  font-size: 20rpx;
+  color: #ccc;
+  display: block;
+  text-align: right;
+  margin-top: 6rpx;
+}
+
+/* ===== 紧急程度 ===== */
+.urgency-grid {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.urgency-item {
+  flex: 1;
+  padding: 14rpx 0;
+  text-align: center;
+  background: #f9fafb;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: #666;
+  border: 2rpx solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+}
+
+.urgency-item.active {
+  border-color: #07C160;
+  background: #f0fdf4;
+  font-weight: 500;
+}
+
+.urgency-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+}
+
+.dot-1 { background: #4CAF50; }
+.dot-2 { background: #FFA726; }
+.dot-3 { background: #FB8C00; }
+.dot-4 { background: #EF5350; }
+
+/* ===== 底部按钮 ===== */
+.bottom-btn {
+  display: flex;
+  gap: 16rpx;
+  padding: 24rpx 32rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  background: #ffffff;
+  border-top: 1rpx solid #f0f0f0;
+  margin-top: 20rpx;
+}
+
+.btn-prev {
+  flex: 1;
+  height: 80rpx;
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.btn-next {
+  flex: 2;
+  height: 80rpx;
+  background: #07C160;
+  color: #ffffff;
+  border: none;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.btn-next[disabled] {
+  background: #d1d5db;
+  color: #999;
+}
+
+.btn-prev::after,
+.btn-next::after {
+  border: none;
+}
+
+.bottom-btns {
+  display: flex;
+  gap: 16rpx;
+  padding: 24rpx 32rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  background: #ffffff;
+  border-top: 1rpx solid #f0f0f0;
+  margin-top: 20rpx;
+}
+
+.btn-submit {
+  flex: 2;
+  height: 80rpx;
+  background: #07C160;
+  color: #ffffff;
+  border: none;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.btn-submit::after {
+  border: none;
+}
+
+/* ===== 空状态 ===== */
+.empty-state {
+  text-align: center;
+  padding: 60rpx 0;
+}
+
+.empty-icon {
+  font-size: 48rpx;
+  display: block;
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: #999;
+  display: block;
+  margin-top: 12rpx;
+}
+
+.textarea-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6rpx;
+}
+
+.char-count {
+  font-size: 22rpx;
+  color: #ccc;
+}
+
+/* ===== 图片上传 ===== */
+.upload-section {
+  margin-top: 16rpx;
+}
+
+.upload-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.upload-item {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  position: relative;
+  border: 1rpx solid #e5e7eb;
+}
+
+.upload-image {
+  width: 100%;
+  height: 100%;
+}
+
+.upload-delete {
+  position: absolute;
+  top: 4rpx;
+  right: 4rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background: rgba(0,0,0,0.6);
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+}
+
+.upload-add {
+  width: 160rpx;
+  height: 160rpx;
+  border: 2rpx dashed #d1d5db;
+  border-radius: 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  background: #fafafa;
+}
+
+.upload-add-icon {
+  font-size: 48rpx;
+  color: #d1d5db;
+}
+
+.upload-add-text {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.upload-add-count {
+  font-size: 18rpx;
+  color: #ccc;
+}
+
+.upload-tip {
+  display: block;
+  font-size: 20rpx;
+  color: #ccc;
+  margin-top: 10rpx;
+}
+
+/* ===== 地址定位 ===== */
+.location-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 18rpx;
+  background: #f9fafb;
+  border-radius: 12rpx;
+  margin-top: 12rpx;
+}
+
+.location-icon {
+  font-size: 28rpx;
+  margin-right: 12rpx;
+}
+
+.location-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: #1a1a1a;
+}
+
+.location-action {
+  font-size: 24rpx;
+  color: #07C160;
+  font-weight: 500;
+}
+
+.location-hint {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* ===== 联系人 ===== */
+.contact-row {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 12rpx;
+}
+
+.contact-field {
+  flex: 1;
+}
+
+.contact-label {
+  font-size: 22rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.contact-input {
+  width: 100%;
+  height: 60rpx;
+  padding: 0 12rpx;
+  background: #f9fafb;
+  border-radius: 10rpx;
+  font-size: 26rpx;
+  color: #1a1a1a;
+  box-sizing: border-box;
+}
+
+.contact-tip {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #07C160;
+}
+
+/* ===== 历史设备复用提示 ===== */
+.history-tip {
+  margin: 20rpx 24rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  border: 2rpx solid #07C160;
+  box-shadow: 0 4rpx 20rpx rgba(7, 193, 96, 0.15);
+}
+
+.history-tip-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.history-tip-icon {
+  font-size: 36rpx;
+}
+
+.history-tip-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.history-tip-body {
+  max-height: 400rpx;
+  overflow-y: auto;
+}
+
+.history-device-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 12rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.history-device-item:last-child {
+  border-bottom: none;
+}
+
+.history-device-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-device-name {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.history-device-brand {
+  font-size: 22rpx;
+  color: #666;
+  margin-left: 12rpx;
+}
+
+.history-device-model {
+  font-size: 22rpx;
+  color: #999;
+  margin-left: 12rpx;
+}
+
+.history-device-time {
+  font-size: 22rpx;
+  color: #ccc;
+  margin-right: 16rpx;
+}
+
+.history-device-reuse {
+  font-size: 24rpx;
+  color: #07C160;
+  font-weight: 500;
+}
+
+.history-tip-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f5f5f5;
+}
+
+.history-tip-skip {
+  font-size: 24rpx;
+  color: #999;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.history-tip-skip::after {
+  border: none;
+}
+
+.history-tip-close {
+  font-size: 28rpx;
+  color: #999;
+  background: none;
+  border: none;
+  padding: 0 8rpx;
+}
+
+.history-tip-close::after {
+  border: none;
+}
